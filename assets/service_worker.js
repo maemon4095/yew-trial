@@ -8,7 +8,7 @@ var files = [
 
 self.addEventListener('install', function (e) {
     e.waitUntil(
-        caches.open(version).then(function (e) {
+        caches.open(version).then(function (cache) {
             return cache.addAll(files);
         })
     );
