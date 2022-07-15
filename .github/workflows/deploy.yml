@@ -1,0 +1,48 @@
+name: deploy
+env:
+  BRANCH: main
+
+on:
+  push:
+    branches:
+      - "${{ env.BRANCH }}"
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      REPOSITORY_NAME: ${{ github.event.repository.name }}
+    steps:
+      - name: checkout sources
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.BRANCH }}
+      
+      - name: add target
+        run: rustup target add wasm32-unknown-unknown
+        
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: install trunk
+        run: cargo install trunk
+
+      - run: trunk build --release --public-url "$REPOSITORY_NAME/$BRANCH/"
+      
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: pages
+          destination_dir: ${{ env.BRANCH }}
+          enable_jekyll: false
