@@ -1,5 +1,5 @@
 [build]
-target = "./src/assets/index.html"
+target = "src/assets/index.html"
 dist = "dist"
 
 [watch]
