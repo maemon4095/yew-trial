@@ -37,7 +37,7 @@ jobs:
       - name: install trunk
         run: cargo install trunk
 
-      - run: trunk build --release --public-url "$REPOSITORY_NAME/$BRANCH/"
+      - run: trunk build --release --public-url "$REPOSITORY_NAME/"
       
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
