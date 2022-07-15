@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100mm"
+   height="100mm"
+   viewBox="0 0 100 100"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="y.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#414141"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="1.466344"
+     inkscape:cx="181.40355"
+     inkscape:cy="203.22653"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <defs
+     id="defs2" />
+  <rect
+     style="fill:#5b97a6;fill-opacity:1;stroke:none;stroke-width:1.58391;stroke-linecap:square;stroke-opacity:1"
+     id="rect31246"
+     width="100"
+     height="100"
+     x="0"
+     y="-8.8817842e-16" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:147.55px;line-height:1.25;font-family:'HackGenNerd Console';-inkscape-font-specification:'HackGenNerd Console, Normal';fill:#8ed281;fill-opacity:1;stroke:none;stroke-width:1.10663;stroke-opacity:1"
+       x="11.095104"
+       y="99.999832"
+       id="text5816"><tspan
+         sodipodi:role="line"
+         id="tspan5814"
+         style="fill:#8ed281;fill-opacity:1;stroke:none;stroke-width:1.10663;stroke-opacity:1"
+         x="11.095104"
+         y="99.999832">Y</tspan></text>
+  </g>
+</svg>
