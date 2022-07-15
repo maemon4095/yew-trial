@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    
+    <link data-trunk rel="rust" href="../../Cargo.toml" />
+    <link data-trunk rel="copy-file" href="service_worker.js" />
+    <link data-trunk rel="copy-file" href="manifest.json" />
+    <link rel="manifest" href="./manifest.json" />
+
+    <script>
+      window.onload = () => {
+        'use strict'
+
+        if('serviceWorker' in navigator)
+        {
+          navigator.serviceWorker.register("./service_worker.js");
+        }
+      }
+    </script>
+    <title>Yew Trial</title>
+  </head>
+</html>

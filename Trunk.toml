@@ -1,5 +1,5 @@
 [build]
-target = "index.html"
+target = "./src/public/index.html"
 dist = "dist"
 
 [watch]
