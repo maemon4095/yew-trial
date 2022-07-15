@@ -3,12 +3,12 @@ env:
   BRANCH: main
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "${{ env.BRANCH }}"
     paths-ignore:
       - '.github/**'
-    workflow_dispatch:
 
 jobs:
   deploy:
