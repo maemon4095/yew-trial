@@ -1,0 +1,10 @@
+{
+    "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+    "name" : "Yew Trial PWA",
+    "short_name" : "Yew Trial PWA",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "gray",
+    "theme_color": "gray",
+    "lang": "ja-JP"
+}
