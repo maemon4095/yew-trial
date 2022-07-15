@@ -2,14 +2,14 @@
     "$schema": "https://json.schemastore.org/web-manifest-combined.json",
     "name": "Yew Trial PWA",
     "short_name": "Yew Trial PWA",
-    "start_url": "./index.html",
+    "start_url": "/yew-trial/index.html",
     "display": "standalone",
     "background_color": "gray",
     "theme_color": "gray",
     "lang": "ja-JP",
     "icons": [
         {
-            "src": "./y.svg",
+            "src": "/yew-trial/assets/y.svg",
             "sizes": "48x48 72x72 96x96 128x128 256x256",
             "type": "image/svg+xml",
             "purpose": "any"
