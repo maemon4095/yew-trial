@@ -2,7 +2,7 @@ var version = 'yew-trial 0.0.0';
 var files = [
     './',
     './index.html',
-    './assets/y.svg'
+    './assets/images/y.svg'
 ];
 
 
