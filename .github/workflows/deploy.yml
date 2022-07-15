@@ -34,8 +34,16 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       
+      - name: install cargo-update
+        run: cargo install cargo-update
+        continue-on-error: true
+      
       - name: install trunk
         run: cargo install trunk
+        continue-on-error: true
+        
+      - name: update cargo tools
+        run: cargo install-update --all
 
       - run: trunk build --release --public-url "$REPOSITORY_NAME/"
       
