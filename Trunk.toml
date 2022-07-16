@@ -1,6 +1,6 @@
 [build]
 target = "src/wwwroot/index.html"
-dist = "dist"
+dist = ".output/dist"
 
 [watch]
 watch = ["src/"]
