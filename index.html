@@ -4,16 +4,20 @@
 
   <script type="module">import init from '/yew-trial/yew-trial-5169f8063655f509.js';init('/yew-trial/yew-trial-5169f8063655f509_bg.wasm');</script>
   
-  <link rel="manifest" href="./assets/manifest.json">
+  
+  
+  <link rel="manifest" href="./manifest.json">
 
   <script>
     window.onload = () => {
       'use strict'
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("./assets/service_worker.js");
+        navigator.serviceWorker.register("./service_worker.js", { scope: "/" });
       }
     }
+
+    console.log("base: " + document.baseURI);
   </script>
   <title>Yew Trial</title>
 
