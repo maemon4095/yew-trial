@@ -34,7 +34,7 @@ jobs:
             ~/.output/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      
+
       - name: install cargo-update
         run: cargo install cargo-update
         continue-on-error: true
