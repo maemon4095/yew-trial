@@ -5,18 +5,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link data-trunk rel="rust" href="../Cargo.toml" />
+  <link data-trunk rel="rust" href="../../Cargo.toml" />
   <link data-trunk rel="copy-dir" href="./assets/" />
-  <link rel="manifest" href="./assets/manifest.json" />
+  <link data-trunk rel="copy-file" href="./service_worker.js" />
+  <link data-trunk rel="copy-file" href="./manifest.json" />
+  <link rel="manifest" href="./manifest.json" />
 
   <script>
     window.onload = () => {
       'use strict'
 
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register("./assets/service_worker.js");
+        navigator.serviceWorker.register("./service_worker.js", { scope: "/" });
       }
     }
+
+    console.log("base: " + document.baseURI);
   </script>
   <title>Yew Trial</title>
 </head>
