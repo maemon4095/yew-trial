@@ -20,11 +20,8 @@ fn main() -> Result<()> {
         .collect::<Vec<String>>()
         .join(",");
 
-    println!("files {:?}", f);
     let sw_str = fs::read_to_string("service_worker.js")?;
-    println!("sw_str {:?}", sw_str);
     let replaced = sw_str.replace("//<:replace:>", &f);
-    println!("replaced {:?}", replaced);
     let mut sw = OpenOptions::new()
         .write(true)
         .truncate(true)
@@ -33,8 +30,6 @@ fn main() -> Result<()> {
 
     write!(sw, "{}", replaced)?;
     sw.flush()?;
-
-    println!("ok?");
 
     Ok(())
 }
