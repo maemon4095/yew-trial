@@ -1,0 +1,65 @@
+use std::{
+    env, fs,
+    fs::OpenOptions,
+    io::{Result, Write},
+    path::Path,
+};
+
+fn main() -> Result<()> {
+    let mut current = env::current_dir()?;
+    current.push(".output/dist/.stage");
+    env::set_current_dir(&current);
+    let f = files(current)
+        .into_iter()
+        .filter(move |str| match &**str {
+            "service_worker.js" => false,
+            "manifest.js" => false,
+            _ => true,
+        })
+        .map(|str| format!("'{}'", str))
+        .collect::<Vec<String>>()
+        .join(",");
+
+    println!("files {:?}", f);
+    let sw_str = fs::read_to_string("service_worker.js")?;
+    println!("sw_str {:?}", sw_str);
+    let replaced = sw_str.replace("//<:replace:>", &f);
+    println!("replaced {:?}", replaced);
+    let mut sw = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open("service_worker.js")?;
+
+    write!(sw, "{}", replaced)?;
+    sw.flush()?;
+
+    println!("ok?");
+
+    Ok(())
+}
+
+fn files(path: impl AsRef<Path>) -> Vec<String> {
+    let current = env::current_dir().unwrap();
+    if path.as_ref().is_file() {
+        let stripped = path.as_ref().strip_prefix(current);
+
+        return match stripped {
+            Ok(s) => vec![s.to_string_lossy().into_owned()],
+            _ => vec![],
+        };
+    }
+
+    let dir = fs::read_dir(path);
+
+    match dir {
+        Ok(d) => d
+            .filter_map(|entry| {
+                let entry = entry.ok()?;
+                Some(files(entry.path()))
+            })
+            .flatten()
+            .collect::<Vec<String>>(),
+        _ => vec![],
+    }
+}

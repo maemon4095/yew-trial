@@ -4,3 +4,8 @@ dist = ".output/dist"
 
 [watch]
 watch = ["src/"]
+
+[[hooks]]
+stage = "post_build"
+command = "cargo"
+command_arguments = ["script",  "meta/hooks/post_build"]

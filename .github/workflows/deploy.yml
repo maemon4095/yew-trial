@@ -42,6 +42,10 @@ jobs:
       - name: install trunk
         run: cargo install trunk
         continue-on-error: true
+
+      - name: install cargo-script
+        run: cargo install cargo-script
+        continue-on-error: true
         
       - name: update cargo tools
         run: cargo install-update --all
