@@ -26,13 +26,13 @@ jobs:
       
       - name: install trunk
         uses: baptiste0928/cargo-install@v1
-          with:
-            crate: trunk
+        with:
+          crate: trunk
 
       - name: install cargo-script
         uses: baptiste0928/cargo-install@v1
-          with:
-            crate: cargo-script
+        with:
+          crate: cargo-script
 
       - name: restore build cache
         uses: actions/cache@v3
