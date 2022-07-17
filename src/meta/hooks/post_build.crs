@@ -8,7 +8,7 @@ use std::{
 fn main() -> Result<()> {
     let mut current = env::current_dir()?;
     current.push(".output/dist/.stage");
-    env::set_current_dir(&current);
+    env::set_current_dir(&current)?;
     let f = files(current)
         .into_iter()
         .filter(move |str| match &**str {
