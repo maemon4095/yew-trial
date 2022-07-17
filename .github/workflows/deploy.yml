@@ -34,6 +34,12 @@ jobs:
           with:
             crate: cargo-script
 
+      - name: restore build cache
+        uses: actions/cache@v3
+        with:
+          path: .output
+          key: ${{ runner.os }}-yew-trial
+
       - run: mkdir -p .output
 
       - run: trunk build --release --public-url "$REPOSITORY_NAME/"
