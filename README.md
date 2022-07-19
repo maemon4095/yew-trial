@@ -10,18 +10,19 @@ target-dir = ".output/target" #Cargo.tomlからの相対パス
 
 # index.html の移動
 
-`Trunk.toml`に以下を追記．
-```toml
-[build]
-target = "src/wwwroot/index.html" #Trunk.tomlからindex.htmlまでの相対パス
-```
+- `Trunk.toml`に以下を追記．
+  ```toml
+  [build]
+  target = "src/wwwroot/index.html" #Trunk.tomlからindex.htmlまでの相対パス
+  ```
 
-`index.html`に以下を記述．`href`には`index.html`から`Cargo.toml`への相対パスを記述．
-`index.html`をルートから移動した場合，これを書かないと動かない．
+- `index.html`に以下を記述．
+  `href`には`index.html`から`Cargo.toml`への相対パスを記述．
+  `index.html`をルートから移動した場合，これを書かないと動かない．
 
-```html
-<link data-trunk rel="rust" href="../../Cargo.toml" />
-```
+  ```html
+  <link data-trunk rel="rust" href="../../Cargo.toml" />
+  ```
 
 # distの移動
 `Trunk.toml`に以下を追記．
