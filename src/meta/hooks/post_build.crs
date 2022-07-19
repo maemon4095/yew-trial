@@ -11,9 +11,8 @@ fn main() -> Result<()> {
     env::set_current_dir(&current)?;
     let f = files(current)
         .into_iter()
-        .filter(move |str| match &**str {
-            "service_worker.js" => false,
-            "manifest.js" => false,
+        .filter(|str| match str.as_str() {
+            "service_worker.js" | "manifest.js" => false,
             _ => true,
         })
         .map(|str| format!("'{}'", str))
