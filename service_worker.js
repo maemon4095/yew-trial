@@ -1,6 +1,6 @@
 var version = 'yew-trial 0.0.0';
 var files = [
-    'index.html','yew-trial-5169f8063655f509_bg.wasm','yew-trial-5169f8063655f509.js','manifest.json','assets/images/ycon.svg'
+    'index.html','manifest.json','yew-trial-c06082c52bff8413.js','yew-trial-c06082c52bff8413_bg.wasm','assets/images/ycon.svg'
 ];
 
 

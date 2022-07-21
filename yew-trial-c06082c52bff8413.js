@@ -208,7 +208,7 @@ function makeClosure(arg0, arg1, dtor, f) {
     return real;
 }
 function __wbg_adapter_18(arg0, arg1, arg2) {
-    wasm._dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he4f845b4addb6a34(arg0, arg1, addHeapObject(arg2));
+    wasm._dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h4dfceaf6634c05f3(arg0, arg1, addHeapObject(arg2));
 }
 
 let cachedUint32Memory0;
@@ -508,7 +508,7 @@ function initSync(bytes) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('yew-trial-5169f8063655f509_bg.wasm', import.meta.url);
+        input = new URL('yew-trial-c06082c52bff8413_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
