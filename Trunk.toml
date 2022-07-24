@@ -8,4 +8,4 @@ watch = ["src/"]
 [[hooks]]
 stage = "post_build"
 command = "cargo"
-command_arguments = ["script",  "src/meta/hooks/post_build"]
+command_arguments = ["script",  "src/.meta/hooks/post_build"]
