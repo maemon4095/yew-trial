@@ -1,0 +1,109 @@
+// cargo-deps: regex
+extern crate regex;
+use regex::Regex;
+use std::{env, fs, io::Result, path::Path};
+
+fn main() -> Result<()> {
+    let config = parse(env::args().skip(1));
+    if let Some(ref dir) = config.directory {
+        env::set_current_dir(&*dir)?;
+    }
+
+    let filenames = files(&"./")
+        .into_iter()
+        .filter(|str| config.accept(&*str))
+        .map(|str| format!("{}", str));
+
+    for f in filenames {
+        println!("rm file: {}", f);
+        match fs::remove_file(f) {
+            Err(why) => println!("err : {}", why),
+            Ok(_) => println!("successfully removed"),
+        };
+    }
+
+    Ok(())
+}
+
+fn files(path: &impl AsRef<Path>) -> Vec<String> {
+    let current = fs::canonicalize(env::current_dir().unwrap()).unwrap();
+    if path.as_ref().is_file() {
+        let fullpath = fs::canonicalize(path).unwrap();
+        let stripped = fullpath.strip_prefix(current);
+        return match stripped {
+            Ok(s) => vec![s.to_string_lossy().to_string()],
+            _ => vec![],
+        };
+    }
+
+    let dir = fs::read_dir(path);
+
+    match dir {
+        Ok(d) => d
+            .filter_map(|entry| {
+                let entry = entry.ok()?;
+                Some(files(&entry.path()))
+            })
+            .flatten()
+            .collect::<Vec<String>>(),
+        _ => vec![],
+    }
+}
+
+fn parse(args: impl Iterator<Item = String>) -> Config {
+    use ParseState::*;
+
+    let mut config = Config {
+        directory: Option::None,
+        patterns: Vec::new(),
+    };
+
+    let mut state = Initial;
+    for arg in args {
+        state = match state {
+            Initial => match &*arg {
+                "-d" => Directory,
+                "-r" => RegexPattern,
+                "-p" => PlainPattern,
+                _ => panic!("invalid arg"),
+            },
+            Directory => {
+                println!("dir: {}", &arg);
+                config.directory = Some(arg);
+                Initial
+            }
+            RegexPattern => {
+                let reg = Regex::new(&*arg).unwrap();
+                println!("regex pattern: {}", &reg);
+                config.patterns.push(Box::new(move |str| reg.is_match(str)));
+                Initial
+            }
+            PlainPattern => {
+                println!("plain pattern: {}", &arg);
+                config.patterns.push(Box::new(move |str| str == &*arg));
+                Initial
+            }
+            _ => panic!("invalid state"),
+        }
+    }
+
+    return config;
+}
+
+enum ParseState {
+    Initial,
+    Directory,
+    PlainPattern,
+    RegexPattern,
+}
+
+struct Config {
+    directory: Option<String>,
+    patterns: Vec<Box<dyn Fn(&str) -> bool>>,
+}
+
+impl Config {
+    fn accept(&self, path: &str) -> bool {
+        self.patterns.iter().any(|p| p(path))
+    }
+}

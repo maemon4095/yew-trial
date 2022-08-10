@@ -1,0 +1,171 @@
+//! ```cargo
+//! [dependencies]
+//! regex = "1.6.0"
+//! reqwest = { version = "0.11", features = ["blocking", "json"] }
+//! ```
+extern crate regex;
+extern crate reqwest;
+use regex::Regex;
+use std::{
+    env, fs,
+    io::{Result, Write},
+    path::Path,
+};
+
+fn main() -> Result<()> {
+    let filenames = files(&".output/dist/.stage")
+        .into_iter()
+        .filter(|str| Path::new(&str).extension().map(|s| s.to_str().unwrap()) == Some("html"))
+        .map(|str| fs::canonicalize(str).unwrap().to_str().unwrap().to_string());
+
+    for f in filenames {
+        replace(&*f, "<link (.*?)>", |caps| {
+            let total = caps.get(0).unwrap();
+            let tag_data = caps.get(1).unwrap();
+            let attrs = attributes(tag_data.as_str());
+            if let Some((_, Some(val))) = attrs.iter().find(|(id, _)| *id == "inline-cdn") {
+                print!("\x1b[32minline-cdn[{}]:\x1b[0m", val);
+
+                let opt = match *val {
+                    "script" => cdn_script(&attrs),
+                    _ => {
+                        println!("\x1b[91minvalid mode\x1b[0m");
+                        None
+                    }
+                };
+
+                if let Some(v) = opt {
+                    return v;
+                }
+            }
+
+            total.as_str().to_string()
+        })?;
+    }
+
+    Ok(())
+}
+
+fn cdn_script<'a>(attrs: &Vec<(&'a str, Option<&str>)>) -> Option<String> {
+    if let Some(source) = attrs
+        .iter()
+        .find_map(|(id, val)| if *id == "src" { val.as_ref() } else { None })
+    {
+        if let Ok(Ok(text)) = reqwest::blocking::get(*source).map(|resp| resp.text()) {
+            println!("replace link to script src={}", source);
+            return Some(format!("<script>\n{}\n</script>", text));
+        } else {
+            println!("\x1b[91m{}\x1b[0m", "invalid source");
+        }
+    } else {
+        println!("\x1b[91m{}\x1b[0m", "src must given");
+    }
+
+    return None;
+}
+
+fn attributes<'a>(tag: &'a str) -> Vec<(&'a str, Option<&str>)> {
+    let mut vec = Vec::new();
+    let mut tag = tag.trim_start();
+
+    while !tag.is_empty() {
+        if let Some(eq) = tag.find("=") {
+            let id = tag[..eq].trim();
+            let left = tag[(eq + 1)..].trim_start();
+
+            let mut start = 0;
+            let mut end = 0;
+            let mut state = 0;
+            for (i, c) in left.chars().enumerate() {
+                match state {
+                    0 => match c {
+                        '"' => {
+                            start = i + 1;
+                            state = 2;
+                        }
+                        '\'' => {
+                            start = i + 1;
+                            state = 4
+                        }
+                        _ => {}
+                    },
+                    2 => match c {
+                        '\\' => {
+                            state += 1;
+                        }
+                        '"' => {
+                            end = i;
+                            break;
+                        }
+                        _ => {}
+                    },
+                    4 => match c {
+                        '\\' => {
+                            state += 1;
+                        }
+                        '\'' => {
+                            end = i;
+                            break;
+                        }
+                        _ => {}
+                    },
+                    _ => {
+                        state -= 1;
+                    }
+                }
+            }
+
+            vec.push((id, Some(&left[start..end])));
+            tag = left[(end + 1)..].trim_start();
+        } else if let Some(space) = tag.find(char::is_whitespace) {
+            let id = tag[..space].trim();
+            vec.push((id, None));
+            tag = tag[(space + 1)..].trim_start();
+        } else {
+            break;
+        }
+    }
+
+    return vec;
+}
+
+fn replace(file: &str, regex: &str, dst: impl Fn(&regex::Captures) -> String) -> Result<()> {
+    let regex = Regex::new(regex).unwrap();
+    let sw_str = fs::read_to_string(file)?;
+    let replaced = regex.replace_all(&*sw_str, dst);
+    let mut sw = fs::OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open(file)?;
+
+    write!(sw, "{}", replaced)?;
+    sw.flush()?;
+
+    Ok(())
+}
+
+fn files(path: &impl AsRef<Path>) -> Vec<String> {
+    let current = fs::canonicalize(env::current_dir().unwrap()).unwrap();
+    if path.as_ref().is_file() {
+        let fullpath = fs::canonicalize(path).unwrap();
+        let stripped = fullpath.strip_prefix(current);
+        return match stripped {
+            Ok(s) => vec![s.to_string_lossy().to_string()],
+            _ => vec![],
+        };
+    }
+
+    let dir = fs::read_dir(path);
+
+    match dir {
+        Ok(d) => d
+            .filter_map(|entry| {
+                let entry = entry.ok()?;
+                Some(files(&entry.path()))
+            })
+            .flatten()
+            .collect::<Vec<String>>(),
+        _ => vec![],
+    }
+}
